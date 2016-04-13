@@ -21,6 +21,7 @@ protected:
 private:
     GLint _angle;
 
+    void InitTextures();
     void drawAxis();
 };
 

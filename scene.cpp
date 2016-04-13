@@ -192,19 +192,66 @@ void InitVertexs()
        VertexArray[11][2]=-R;
 }
 
+GLuint textureId[1];
+GLfloat textCoord[3][2];
+
+void Scene::InitTextures()
+{
+    textureId[0] = 15;
+    glEnable(GL_TEXTURE_2D);
+
+    QImage pm(QString("back.png"));
+    pm = QGLWidget::convertToGLFormat(pm);
+    //textureId = bindTexture(pm, GL_TEXTURE_2D, GL_RGBA);
+
+    glGenTextures(1, textureId); // создаём два имени и записываем их в массив
+
+       // создаём и связываем текстурные объекты с состоянием текстуры
+       // 1-ый текстурный объект
+       // создаём и связываем 1-ый текстурный объект с последующим состоянием текстуры
+    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+       // связываем текстурный объект с изображением
+
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, (GLsizei)pm.width(), (GLsizei)pm.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pm.bits());
+
+    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+    // задаём линейную фильтрацию вблизи:
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+       // задаём линейную фильтрацию вдали:
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+    textCoord[0][0] = 0.f;
+    textCoord[0][1] = 0.f;
+
+    textCoord[1][0] = 1.f;
+    textCoord[1][1] = 0.f;
+
+    textCoord[2][0] = 0.5f;
+    textCoord[2][1] = 0.5f;
+}
+
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
 {
     InitVertexs();
     InitColors();
     InitIndexs();
     _angle = 0;
+
+    glEnable(GL_TEXTURE_2D);
+
+
 }
 
 void Scene::initializeGL()
 {
-    qglClearColor(Qt::green);
+    qglClearColor(Qt::gray);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
+    InitTextures();
 }
 
 void Scene::resizeGL(int w, int h)
@@ -223,20 +270,29 @@ void Scene::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    glEnable(GL_TEXTURE_2D);
+
     drawAxis();
 
-    glRotated(_angle, 0, 1, 0);
+    glRotated(_angle, 1, 0, 0);
+
+
+    glBindTexture(GL_TEXTURE_2D, textureId[0]);
 
     glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    //glEnableClientState(GL_COLOR_ARRAY);
+
+    glBindTexture(GL_TEXTURE_2D, textureId[0]);
 
     glVertexPointer(3, GL_FLOAT, 0, VertexArray);
     // указываем, откуда нужно извлечь данные о массиве цветов вершин
-    glColorPointer(3, GL_FLOAT, 0, ColorArray);
+    glTexCoordPointer(2, GL_FLOAT, 0, textCoord);
+   // glColorPointer(3, GL_FLOAT, 0, ColorArray);
     // используя массивы вершин и индексов, строим поверхноси
-    glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_BYTE, IndexArray);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, IndexArray);
 
-    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
@@ -271,6 +327,6 @@ void Scene::drawAxis()
 
 void Scene::Update()
 {
-    ++_angle;
+    _angle += 1;
     updateGL();
 }
