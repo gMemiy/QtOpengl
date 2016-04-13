@@ -10,12 +10,17 @@ class Scene : public QGLWidget
 public:
     Scene(QWidget *parent = 0);
 
+public slots:
+    void Update();
+
 protected:
     virtual void initializeGL() override;
     virtual void paintGL() override;
     virtual void resizeGL(int w, int h) override;
 
 private:
+    GLint _angle;
+
     void drawAxis();
 };
 

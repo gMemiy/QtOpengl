@@ -197,6 +197,7 @@ Scene::Scene(QWidget *parent) : QGLWidget(parent)
     InitVertexs();
     InitColors();
     InitIndexs();
+    _angle = 0;
 }
 
 void Scene::initializeGL()
@@ -223,6 +224,8 @@ void Scene::paintGL()
     glLoadIdentity();
 
     drawAxis();
+
+    glRotated(_angle, 0, 1, 0);
 
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_COLOR_ARRAY);
@@ -266,4 +269,8 @@ void Scene::drawAxis()
    glEnd();
 }
 
-
+void Scene::Update()
+{
+    ++_angle;
+    updateGL();
+}
