@@ -13,6 +13,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    scene.cpp
+    scene.cpp \
+    particle.cpp \
+    particlesystem.cpp
 
-HEADERS  += scene.h
+HEADERS  += scene.h \
+    particle.h \
+    particlesystem.h

@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
+    srand(0);
 
     Scene *s = new Scene();
     QTimer *timer = new QTimer();

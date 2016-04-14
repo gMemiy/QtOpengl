@@ -1,206 +1,14 @@
 #include "scene.h"
 
 
-const static float pi=3.141593, k=pi/180; // глобальная переменная
-
-GLfloat VertexArray[12][3]; // декларируем массив вершин
-GLfloat ColorArray[12][3];  // декларируем массив цветов вершин
-GLubyte IndexArray[20][3];
-
-void InitColors()
-{
-    for (int i=0; i<12; i++)
-       {
-          ColorArray[i][0]=0.1f*(qrand()%11); // R - красная составляющая
-          ColorArray[i][1]=0.1f*(qrand()%11); // G - зелёная составляющая
-          ColorArray[i][2]=0.1f*(qrand()%11); // B - синяя составляющая
-          // qrand()%11 - псевдослучайное число от 0 до 10
-       }
-}
-
-void InitIndexs()
-{
-    // 0 треугольник
-       IndexArray[0][0]=0; // индекс (номер) 1-ой вершины
-       IndexArray[0][1]=2; // индекс (номер) 2-ой вершины
-       IndexArray[0][2]=1; // индекс (номер) 3-ей вершины
-
-       // 1 треугольник
-       IndexArray[1][0]=0;
-       IndexArray[1][1]=3;
-       IndexArray[1][2]=2;
-
-       // 2 треугольник
-       IndexArray[2][0]=0;
-       IndexArray[2][1]=4;
-       IndexArray[2][2]=3;
-
-       // 3 треугольник
-       IndexArray[3][0]=0;
-       IndexArray[3][1]=5;
-       IndexArray[3][2]=4;
-
-       // 4 треугольник
-       IndexArray[4][0]=0;
-       IndexArray[4][1]=1;
-       IndexArray[4][2]=5;
-
-       // 5 треугольник
-       IndexArray[5][0]=6;
-       IndexArray[5][1]=1;
-       IndexArray[5][2]=7;
-
-       // 6 треугольник
-       IndexArray[6][0]=7;
-       IndexArray[6][1]=1;
-       IndexArray[6][2]=2;
-
-       // 7 треугольник
-       IndexArray[7][0]=7;
-       IndexArray[7][1]=2;
-       IndexArray[7][2]=8;
-
-       // 8 треугольник
-       IndexArray[8][0]=8;
-       IndexArray[8][1]=2;
-       IndexArray[8][2]=3;
-
-       // 9 треугольник
-       IndexArray[9][0]=8;
-       IndexArray[9][1]=3;
-       IndexArray[9][2]=9;
-
-       // 10 треугольник
-       IndexArray[10][0]=9;
-       IndexArray[10][1]=3;
-       IndexArray[10][2]=4;
-
-       // 11 треугольник
-       IndexArray[11][0]=9;
-       IndexArray[11][1]=4;
-       IndexArray[11][2]=10;
-
-       // 12 треугольник
-       IndexArray[12][0]=10;
-       IndexArray[12][1]=4;
-       IndexArray[12][2]=5;
-
-       // 13 треугольник
-       IndexArray[13][0]=10;
-       IndexArray[13][1]=5;
-       IndexArray[13][2]=6;
-
-       // 14 треугольник
-       IndexArray[14][0]=6;
-       IndexArray[14][1]=5;
-       IndexArray[14][2]=1;
-
-       // 15 треугольник
-       IndexArray[15][0]=7;
-       IndexArray[15][1]=11;
-       IndexArray[15][2]=6;
-
-       // 16 треугольник
-       IndexArray[16][0]=8;
-       IndexArray[16][1]=11;
-       IndexArray[16][2]=7;
-
-       // 17 треугольник
-       IndexArray[17][0]=9;
-       IndexArray[17][1]=11;
-       IndexArray[17][2]=8;
-
-       // 18 треугольник
-       IndexArray[18][0]=10;
-       IndexArray[18][1]=11;
-       IndexArray[18][2]=9;
-
-       // 19 треугольник
-       IndexArray[19][0]=6;
-       IndexArray[19][1]=11;
-       IndexArray[19][2]=10;
-}
-
-void InitVertexs()
-{
-    GLfloat R=0.75; // радиус сферы
-
-       // начальные значения для икосаэдра
-       GLfloat a=4*R/sqrt(10+2*sqrt(5)); // сторона икосаэдра
-       GLfloat alpha=acos((1-a*a/2/R/R)); // первый угол поворота по тэта
-       // cos(alpha)=(1-a*a/2/R/R)
-
-       // вычисляем точки икосаэдра
-       //0 точка
-       VertexArray[0][0]=0;   // x
-       VertexArray[0][1]=0;   // y
-       VertexArray[0][2]=R;   // z
-
-       //1 точка
-       VertexArray[1][0]=R*sin(alpha)*sin(0);
-       VertexArray[1][1]=R*sin(alpha)*cos(0);
-       VertexArray[1][2]=R*cos(alpha);
-
-       //2 точка
-       VertexArray[2][0]=R*sin(alpha)*sin(72*k);
-       VertexArray[2][1]=R*sin(alpha)*cos(72*k);
-       VertexArray[2][2]=R*cos(alpha);
-
-       //3 точка
-       VertexArray[3][0]=R*sin(alpha)*sin(2*72*k);
-       VertexArray[3][1]=R*sin(alpha)*cos(2*72*k);
-       VertexArray[3][2]=R*cos(alpha);
-
-       //4 точка
-       VertexArray[4][0]=R*sin(alpha)*sin(3*72*k);
-       VertexArray[4][1]=R*sin(alpha)*cos(3*72*k);
-       VertexArray[4][2]=R*cos(alpha);
-
-       //5 точка
-       VertexArray[5][0]=R*sin(alpha)*sin(4*72*k);
-       VertexArray[5][1]=R*sin(alpha)*cos(4*72*k);
-       VertexArray[5][2]=R*cos(alpha);
-
-       //6 точка
-       VertexArray[6][0]=R*sin(pi-alpha)*sin(-36*k);
-       VertexArray[6][1]=R*sin(pi-alpha)*cos(-36*k);
-       VertexArray[6][2]=R*cos(pi-alpha);
-
-       //7 точка
-       VertexArray[7][0]=R*sin(pi-alpha)*sin(36*k);
-       VertexArray[7][1]=R*sin(pi-alpha)*cos(36*k);
-       VertexArray[7][2]=R*cos(pi-alpha);
-
-       //8 точка
-       VertexArray[8][0]=R*sin(pi-alpha)*sin((36+72)*k);
-       VertexArray[8][1]=R*sin(pi-alpha)*cos((36+72)*k);
-       VertexArray[8][2]=R*cos(pi-alpha);
-
-       //9 точка
-       VertexArray[9][0]=R*sin(pi-alpha)*sin((36+2*72)*k);
-       VertexArray[9][1]=R*sin(pi-alpha)*cos((36+2*72)*k);
-       VertexArray[9][2]=R*cos(pi-alpha);
-
-       //10 точка
-       VertexArray[10][0]=R*sin(pi-alpha)*sin((36+3*72)*k);
-       VertexArray[10][1]=R*sin(pi-alpha)*cos((36+3*72)*k);
-       VertexArray[10][2]=R*cos(pi-alpha);
-
-       //11 точка
-       VertexArray[11][0]=0;
-       VertexArray[11][1]=0;
-       VertexArray[11][2]=-R;
-}
 
 GLuint textureId[1];
-GLfloat textCoord[3][2];
 
 void Scene::InitTextures()
 {
     textureId[0] = 15;
-    glEnable(GL_TEXTURE_2D);
 
-    QImage pm(QString("back.png"));
+    QImage pm(QString("spot.png"));
     pm = QGLWidget::convertToGLFormat(pm);
     //textureId = bindTexture(pm, GL_TEXTURE_2D, GL_RGBA);
 
@@ -212,7 +20,7 @@ void Scene::InitTextures()
     glBindTexture(GL_TEXTURE_2D, textureId[0]);
        // связываем текстурный объект с изображением
 
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, (GLsizei)pm.width(), (GLsizei)pm.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pm.bits());
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, (GLsizei)pm.width(), (GLsizei)pm.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pm.bits());
 
     glBindTexture(GL_TEXTURE_2D, textureId[0]);
     // задаём линейную фильтрацию вблизи:
@@ -222,35 +30,22 @@ void Scene::InitTextures()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-
-    textCoord[0][0] = 0.f;
-    textCoord[0][1] = 0.f;
-
-    textCoord[1][0] = 1.f;
-    textCoord[1][1] = 0.f;
-
-    textCoord[2][0] = 0.5f;
-    textCoord[2][1] = 0.5f;
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
 }
 
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
 {
-    InitVertexs();
-    InitColors();
-    InitIndexs();
     _angle = 0;
-
-    glEnable(GL_TEXTURE_2D);
-
-
 }
 
 void Scene::initializeGL()
 {
     qglClearColor(Qt::gray);
-    glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+   // glEnable(GL_DEPTH_TEST);
+    glEnable(GL_TEXTURE_2D);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_ONE, GL_ONE);
+    glEnable(GL_BLEND);
     InitTextures();
 }
 
@@ -259,7 +54,11 @@ void Scene::resizeGL(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    glOrtho(-2, 2, -2, 2, -2, 2);
+    _hor = glm::vec2(-10, 10);
+    _vert = glm::vec2(-10, 10);
+    _depth = glm::vec2(2, -2);
+
+    glOrtho(_hor.x, _hor.y, _vert.x, _vert.y, _depth.x, _depth.y);
     glViewport(0, 0, w, h);
 }
 
@@ -270,9 +69,8 @@ void Scene::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glEnable(GL_TEXTURE_2D);
-
-    drawAxis();
+    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+    /*drawAxis();
 
     glRotated(_angle, 1, 0, 0);
 
@@ -293,7 +91,10 @@ void Scene::paintGL()
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, IndexArray);
 
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);*/
+
+    _ps.Draw();
+
 }
 
 
@@ -327,6 +128,39 @@ void Scene::drawAxis()
 
 void Scene::Update()
 {
+    static float oldTime;
+    static QTime *timer;
+    if (!timer)
+    {
+        timer = new QTime();
+        timer->start();
+        oldTime = (float)timer->msecsTo(QTime::currentTime()) / 1000.f;
+    }
+    float time = (float)timer->msecsTo(QTime::currentTime()) / 1000.f;
+
+
+    float dt = time - oldTime;
+    oldTime = time;
+
+   // _ps.AddParticle();
+    _ps.Update(dt);
+
     _angle += 1;
     updateGL();
+}
+
+void Scene::mouseMoveEvent(QMouseEvent* pe) // нажатие клавиши мыши
+{
+   // при нажатии пользователем кнопки мыши переменной ptrMousePosition
+   // будет присвоена координата указателя мыши
+   _ps.SetPos(ScreenToWorld(pe->pos()));
+
+   // ptrMousePosition = (*pe).pos(); // можно и так написать
+}
+
+glm::vec3 Scene::ScreenToWorld(QPoint p)
+{
+    float x = (float)p.x() / (float)width() * (float)(abs(_hor.x) + abs(_hor.y)) - (float)abs(_hor.x);
+    float y = ((float)height() - (float)p.y()) / (float)height() * (float)(abs(_vert.x) + abs(_vert.y)) - (float)abs(_vert.x);
+    return glm::vec3( x, y, 0.f);
 }
