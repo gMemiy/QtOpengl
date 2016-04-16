@@ -6,6 +6,8 @@
 
 QT       += core gui opengl
 
+QMAKE_CXXFLAGS += -std=c++0x
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = QtOpenGl
@@ -15,8 +17,10 @@ TEMPLATE = app
 SOURCES += main.cpp\
     scene.cpp \
     particle.cpp \
-    particlesystem.cpp
+    particlesystem.cpp \
+    firework.cpp
 
 HEADERS  += scene.h \
     particle.h \
-    particlesystem.h
+    particlesystem.h \
+    firework.h
