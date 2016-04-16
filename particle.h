@@ -24,7 +24,7 @@ protected:
 class Particle : public Object
 {
 public:
-    Particle(glm::vec3 pos = glm::vec3(0), float lifeTime = 0.5f, float size = 0.5f, float speedMax = 0.2f);
+    Particle(glm::vec3 pos = glm::vec3(0), float lifeTime = 0, float size = 0.5f, float speedMax = 0.2f);
     virtual ~Particle();
     virtual void Draw();
     virtual void Update(float dt);
@@ -35,8 +35,8 @@ public:
 
 protected:
 
-    float _timeLife;
-    float _timer;
+    float _lifeTime;
+    float _lifeTimer;
     float _size;
 };
 

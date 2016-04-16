@@ -4,12 +4,12 @@ ParticleSystem::ParticleSystem(glm::vec3 pos, int count, float lifeime,  float s
   , _count(count)
   , _speed(speed)
 {
-    _spawnTime = _timeLife/_count;
+    SetChildLifeTime(1);
 }
 
 void ParticleSystem::AddParticle()
 {
-    QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _timeLife, _size, _speed));
+    QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _childLifeTime, _size, _speed));
     p->SetColor(_color);
     _particles.push_back(p);
 }
@@ -17,16 +17,19 @@ void ParticleSystem::AddParticle()
 void ParticleSystem::Update(float dt)
 {
 
-    _pos += _vel*dt;
+    Particle::Update(dt);
 
-    _timer += dt;
-    if (_timer >= _spawnTime)
+    if (_lifeTimer >= 0)
     {
-        int count = _timer / _spawnTime;
-        _timer = 0;
-        for (int i = 0; i < count; ++i)
+        _spawnTimer += dt;
+        if (_spawnTimer >= _spawnTime)
         {
-            AddParticle();
+            int count = _spawnTimer / _spawnTime;
+            _spawnTimer = 0;
+            for (int i = 0; i < count; ++i)
+            {
+                AddParticle();
+            }
         }
     }
 
@@ -58,6 +61,11 @@ void ParticleSystem::Draw()
     }
 }
 
+bool ParticleSystem::IsAlive()
+{
+    return _lifeTimer > 0 && !_particles.empty();
+}
+
 void ParticleSystem::SetSpeed(float speed)
 {
     _speed = speed;
@@ -72,5 +80,11 @@ int ParticleSystem::GetCount()
 void ParticleSystem::SetSpeed(glm::vec3 speed)
 {
     _vel = speed;
+}
+
+void ParticleSystem::SetChildLifeTime(float lifeTime)
+{
+    _childLifeTime = lifeTime;
+    _spawnTime = _childLifeTime / _count;
 }
 

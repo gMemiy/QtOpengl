@@ -38,37 +38,15 @@ void Object::Draw()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+///////////////////////////////////////////////////////////////////////////////
 
 Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) :
     Object(pos)
   ,  _size(size)
-  ,  _timeLife(lifeTime)
+  ,  _lifeTime(lifeTime)
+  , _lifeTimer(lifeTime)
 {
     SetMaxSpeed(maxSpeed);
-    _timer = _timeLife;
 }
 
 Particle::~Particle()
@@ -79,7 +57,7 @@ Particle::~Particle()
 void Particle::Draw()
 {
 
-    float alpha = _timer / _timeLife + 0.2f;
+    float alpha = _lifeTimer / _lifeTime + 0.2f;
     _color.a *= alpha;
 
     glColor4fv(&_color[0]);
@@ -98,10 +76,13 @@ void Particle::Draw()
 
 void Particle::Update(float dt)
 {
-    if (_timer > 0)
+    if (_lifeTimer >= 0)
     {
         Object::Update(dt);
-        _timer -= dt;
+        if (_lifeTime > 0)
+        {
+            _lifeTimer -= dt;
+        }
     }
 
 
@@ -109,7 +90,7 @@ void Particle::Update(float dt)
 
 bool Particle::IsAlive()
 {
-    return _timer > 0;
+    return _lifeTimer >= 0;
 }
 
 void Particle::SetSize(float size)
@@ -129,5 +110,5 @@ void Particle::SetMaxSpeed(float maxSpeed)
 
 void Particle::SetLifeTime(float lifeTime)
 {
-    _timeLife = lifeTime;
+    _lifeTime = lifeTime;
 }
