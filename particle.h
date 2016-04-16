@@ -10,14 +10,16 @@ class Object
 public:
     Object(glm::vec3 pos = glm::vec3(0), glm::vec3 vel = glm::vec3(0), glm::vec4 color = glm::vec4(1));
     virtual ~Object();
-    virtual void SetPos(glm::vec3 pos);
+    void SetPos(glm::vec3 pos);
     virtual void Update(float dt);
-    virtual void SetVelocity(glm::vec3 vel);
-    virtual void SetColor(glm::vec4 color);
+    void SetVelocity(glm::vec3 vel);
+    void SetColor(glm::vec4 color);
     virtual void Draw();
+    void SetGravity(glm::vec3 gravity);
 protected:
     glm::vec3 _pos;
     glm::vec3 _vel;
+    glm::vec3 _gravity;
     glm::vec4 _color;
 };
 

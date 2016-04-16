@@ -3,7 +3,8 @@
 
 #include <QGLWidget>
 #include <QtOpenGL>
-#include "particlesystem.h"
+#include "firework.h"
+
 class Scene : public QGLWidget
 {
     Q_OBJECT
@@ -18,13 +19,13 @@ protected:
     virtual void paintGL() override;
     virtual void resizeGL(int w, int h) override;
 
-    void mouseMoveEvent(QMouseEvent* pe);
+    void mousePressEvent(QMouseEvent *pe);
 
 
 private:
     GLint _angle;
-    ParticleSystem _ps;
-    ParticleSystem _tail;
+    FireWork fw;
+
 
     glm::vec2 _hor;
     glm::vec2 _vert;

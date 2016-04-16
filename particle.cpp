@@ -3,6 +3,7 @@ Object::Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color):
     _pos(pos)
   , _vel(vel)
   , _color(color)
+  , _gravity(glm::vec3(0))
 {
 
 }
@@ -25,6 +26,12 @@ void Object::SetVelocity(glm::vec3 vel)
 void Object::Update(float dt)
 {
     _pos += _vel * dt;
+    _vel += _gravity * dt;
+}
+
+void Object::SetGravity(glm::vec3 gravity)
+{
+    _gravity = gravity;
 }
 
 void Object::SetColor(glm::vec4 color)

@@ -48,15 +48,7 @@ void Scene::initializeGL()
     glEnable(GL_BLEND);
     InitTextures();
 
-    _ps.SetSpeed(0.2f);
-    _ps.SetSize(0.5f);
-    _ps.SetSpeed(glm::vec3(0, 5, 0));
-    _ps.SetLifeTime(5.f);
 
-    _tail.SetSpeed(.9f);
-    _tail.SetColor(glm::vec4(0.8f, 0.9f, 0.8f, 1.f));
-    _tail.SetSize(0.3f);
-    _tail.SetSpeed(glm::vec3(0, 2, 0));
 }
 
 void Scene::resizeGL(int w, int h)
@@ -103,8 +95,7 @@ void Scene::paintGL()
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);*/
 
-    _ps.Draw();
-    _tail.Draw();
+    fw.Draw();
 
 }
 
@@ -154,8 +145,7 @@ void Scene::Update()
     float dt = time - oldTime;
     oldTime = time;
 
-    _ps.Update(dt);
-    //_tail.Update(dt);
+    fw.Update(dt);
 
     _angle += 1;
     updateGL();
@@ -165,20 +155,21 @@ void Scene::Update()
     t += dt;
     if (t >= 1)
     {
-        int pCount = _tail.GetCount() + _ps.GetCount();
+        int pCount = fw.ParticleCount();
         setWindowTitle(QString::number(fps) + " " + QString::number(pCount));
         t = 0;
         fps = 0;
     }
 }
 
-void Scene::mouseMoveEvent(QMouseEvent* pe) // нажатие клавиши мыши
+void Scene::mousePressEvent(QMouseEvent* pe) // нажатие клавиши мыши
 {
    // при нажатии пользователем кнопки мыши переменной ptrMousePosition
    // будет присвоена координата указателя мыши
    //_ps.SetPos(ScreenToWorld(pe->pos()));
     //_tail.SetPos(ScreenToWorld(pe->pos()));
    // ptrMousePosition = (*pe).pos(); // можно и так написать
+    fw.Push(ScreenToWorld(pe->pos()));
 }
 
 glm::vec3 Scene::ScreenToWorld(QPoint p)

@@ -18,8 +18,7 @@ public:
     virtual bool IsAlive() override;
 
     void SetChildLifeTime(float lifeTime);
-    void SetSpeed(float speed);
-    void SetSpeed(glm::vec3 speed);
+    void SetChildSpeed(float speed);
     int GetCount();
 private:
 

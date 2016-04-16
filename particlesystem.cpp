@@ -63,10 +63,10 @@ void ParticleSystem::Draw()
 
 bool ParticleSystem::IsAlive()
 {
-    return _lifeTimer > 0 && !_particles.empty();
+    return (_lifeTimer >= 0 ) || !_particles.empty();
 }
 
-void ParticleSystem::SetSpeed(float speed)
+void ParticleSystem::SetChildSpeed(float speed)
 {
     _speed = speed;
 }
@@ -77,14 +77,10 @@ int ParticleSystem::GetCount()
     return _particles.size();
 }
 
-void ParticleSystem::SetSpeed(glm::vec3 speed)
-{
-    _vel = speed;
-}
-
 void ParticleSystem::SetChildLifeTime(float lifeTime)
 {
     _childLifeTime = lifeTime;
     _spawnTime = _childLifeTime / _count;
+    _spawnTimer = _spawnTime;
 }
 
