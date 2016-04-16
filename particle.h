@@ -16,6 +16,8 @@ public:
     void SetColor(glm::vec4 color);
     virtual void Draw();
     void SetGravity(glm::vec3 gravity);
+
+    glm::vec3 GetPos();
 protected:
     glm::vec3 _pos;
     glm::vec3 _vel;

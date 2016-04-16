@@ -1,6 +1,7 @@
 #include "particlesystem.h"
 
-ParticleSystem::ParticleSystem(glm::vec3 pos, int count, float lifeime,  float speed, float size) : Particle(pos, lifeime, size)
+ParticleSystem::ParticleSystem(int type, glm::vec3 pos, int count, float lifeime,  float speed, float size) : Particle(pos, lifeime, size)
+  , _type(type)
   , _count(count)
   , _speed(speed)
 {
@@ -84,3 +85,17 @@ void ParticleSystem::SetChildLifeTime(float lifeTime)
     _spawnTimer = _spawnTime;
 }
 
+int ParticleSystem::GetType()
+{
+    return _type;
+}
+
+void ParticleSystem::SetType(int type)
+{
+    _type = type;
+}
+
+bool ParticleSystem::IsEnd()
+{
+    return !(_lifeTimer >= 0);
+}
