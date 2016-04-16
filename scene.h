@@ -24,6 +24,7 @@ protected:
 private:
     GLint _angle;
     ParticleSystem _ps;
+    ParticleSystem _tail;
 
     glm::vec2 _hor;
     glm::vec2 _vert;

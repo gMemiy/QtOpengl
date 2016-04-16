@@ -30,7 +30,8 @@ void Scene::InitTextures()
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_ADD);
+
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 }
 
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
@@ -41,12 +42,19 @@ Scene::Scene(QWidget *parent) : QGLWidget(parent)
 void Scene::initializeGL()
 {
     qglClearColor(Qt::gray);
-   // glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glBlendFunc(GL_ONE, GL_ONE);
+
     glEnable(GL_BLEND);
     InitTextures();
+    _ps.SetSpeed(0.2f);
+    _ps.SetSize(0.5f);
+    _ps.SetSpeed(glm::vec3(0, 5, 0));
+    _ps.SetLifeTime(5.f);
+    _tail.SetSpeed(.9f);
+    _tail.SetColor(glm::vec4(0.8f, 0.9f, 0.8f, 1.f));
+    _tail.SetSize(0.3f);
+    _tail.SetSpeed(glm::vec3(0, 2, 0));
 }
 
 void Scene::resizeGL(int w, int h)
@@ -54,8 +62,8 @@ void Scene::resizeGL(int w, int h)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    _hor = glm::vec2(-10, 10);
-    _vert = glm::vec2(-10, 10);
+    _hor = glm::vec2(-50, 50);
+    _vert = glm::vec2(-50, 50);
     _depth = glm::vec2(2, -2);
 
     glOrtho(_hor.x, _hor.y, _vert.x, _vert.y, _depth.x, _depth.y);
@@ -94,6 +102,7 @@ void Scene::paintGL()
     glDisableClientState(GL_VERTEX_ARRAY);*/
 
     _ps.Draw();
+    _tail.Draw();
 
 }
 
@@ -128,6 +137,7 @@ void Scene::drawAxis()
 
 void Scene::Update()
 {
+    static float t = 0.f;
     static float oldTime;
     static QTime *timer;
     if (!timer)
@@ -142,19 +152,30 @@ void Scene::Update()
     float dt = time - oldTime;
     oldTime = time;
 
-   // _ps.AddParticle();
     _ps.Update(dt);
+    _tail.Update(dt);
 
     _angle += 1;
     updateGL();
+
+    static int fps = 0;
+    fps++;
+    t += dt;
+    if (t >= 1)
+    {
+        int pCount = _tail.GetCount() + _ps.GetCount();
+        setWindowTitle(QString::number(fps) + " " + QString::number(pCount));
+        t = 0;
+        fps = 0;
+    }
 }
 
 void Scene::mouseMoveEvent(QMouseEvent* pe) // нажатие клавиши мыши
 {
    // при нажатии пользователем кнопки мыши переменной ptrMousePosition
    // будет присвоена координата указателя мыши
-   _ps.SetPos(ScreenToWorld(pe->pos()));
-
+   //_ps.SetPos(ScreenToWorld(pe->pos()));
+    //_tail.SetPos(ScreenToWorld(pe->pos()));
    // ptrMousePosition = (*pe).pos(); // можно и так написать
 }
 

@@ -11,10 +11,14 @@ public:
     void Draw();
     void Update(float dt);
     bool IsAlive();
+    void SetSize(float size);
+    void SetMaxSpeed(float maxSpeed);
+    void SetColor(glm::vec4 color);
 
 private:
     glm::vec3 _pos;
     glm::vec3 _vel;
+    glm::vec4 _color;
 
     float _timeLife;
     float _timer;
