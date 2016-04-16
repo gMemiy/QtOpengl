@@ -1,9 +1,79 @@
 #include "particle.h"
+Object::Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color):
+    _pos(pos)
+  , _vel(vel)
+  , _color(color)
+{
 
-Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) : _pos(pos), _size(size), _timeLife(lifeTime)
+}
+
+Object::~Object()
+{
+
+}
+
+void Object::SetPos(glm::vec3 pos)
+{
+    _pos = pos;
+}
+
+void Object::SetVelocity(glm::vec3 vel)
+{
+    _vel = vel;
+}
+
+void Object::Update(float dt)
+{
+    _pos += _vel * dt;
+}
+
+void Object::SetColor(glm::vec4 color)
+{
+    _color = color;
+}
+
+void Object::Draw()
+{
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) :
+    Object(pos)
+  ,  _size(size)
+  ,  _timeLife(lifeTime)
 {
     SetMaxSpeed(maxSpeed);
     _timer = _timeLife;
+}
+
+Particle::~Particle()
+{
+
 }
 
 void Particle::Draw()
@@ -30,10 +100,7 @@ void Particle::Update(float dt)
 {
     if (_timer > 0)
     {
-        _pos.x += _vel.x * dt;
-        _pos.y += _vel.y * dt;
-        _pos.z += _vel.z * dt;
-
+        Object::Update(dt);
         _timer -= dt;
     }
 
@@ -49,6 +116,7 @@ void Particle::SetSize(float size)
 {
     _size = size;
 }
+
 void Particle::SetMaxSpeed(float maxSpeed)
 {
     float speed = (float)((float)(rand() % 10) * maxSpeed - 5.f * maxSpeed) / (10.f );
@@ -59,7 +127,7 @@ void Particle::SetMaxSpeed(float maxSpeed)
     _vel.z = speed;
 }
 
-void Particle::SetColor(glm::vec4 color)
+void Particle::SetLifeTime(float lifeTime)
 {
-    _color = color;
+    _timeLife = lifeTime;
 }

@@ -47,10 +47,12 @@ void Scene::initializeGL()
 
     glEnable(GL_BLEND);
     InitTextures();
+
     _ps.SetSpeed(0.2f);
     _ps.SetSize(0.5f);
     _ps.SetSpeed(glm::vec3(0, 5, 0));
     _ps.SetLifeTime(5.f);
+
     _tail.SetSpeed(.9f);
     _tail.SetColor(glm::vec4(0.8f, 0.9f, 0.8f, 1.f));
     _tail.SetSize(0.3f);
@@ -153,7 +155,7 @@ void Scene::Update()
     oldTime = time;
 
     _ps.Update(dt);
-    _tail.Update(dt);
+    //_tail.Update(dt);
 
     _angle += 1;
     updateGL();

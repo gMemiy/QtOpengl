@@ -1,21 +1,15 @@
 #include "particlesystem.h"
 
-ParticleSystem::ParticleSystem(int count, float lifeime,  float speed, float size) :
-    _pos(0)
+ParticleSystem::ParticleSystem(glm::vec3 pos, int count, float lifeime,  float speed, float size) : Particle(pos, lifeime, size)
   , _count(count)
-  , _lifeTime(lifeime)
-  , _timer(0)
   , _speed(speed)
-  , _color(glm::vec4(1,1,1,1))
-  , _size(size)
-  , _vel(0)
 {
-    _spawnTime = _lifeTime/_count;
+    _spawnTime = _timeLife/_count;
 }
 
 void ParticleSystem::AddParticle()
 {
-    QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _lifeTime, _size, _speed));
+    QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _timeLife, _size, _speed));
     p->SetColor(_color);
     _particles.push_back(p);
 }
@@ -64,35 +58,15 @@ void ParticleSystem::Draw()
     }
 }
 
-void ParticleSystem::SetPos(glm::vec3 pos)
-{
-    _pos = pos;
-}
-
-
 void ParticleSystem::SetSpeed(float speed)
 {
     _speed = speed;
 }
 
-void ParticleSystem::SetColor(glm::vec4 color)
-{
-    _color = color;
-}
 
 int ParticleSystem::GetCount()
 {
     return _particles.size();
-}
-
-void ParticleSystem::SetSize(float size)
-{
-    _size = size;
-}
-
-void ParticleSystem::SetLifeTime(float lifeTime)
-{
-    _lifeTime = lifeTime;
 }
 
 void ParticleSystem::SetSpeed(glm::vec3 speed)
