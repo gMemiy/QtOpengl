@@ -50,10 +50,10 @@ void Scene::initializeGL()
     _cloud[0] = InitTexture("cloud.png");
     _cloud[1] = InitTexture("cloud1.png");
 
-    cloud = new Cloud(glm::vec3(0, 40, 0), glm::vec3(1, 0, 0));
-    cloud->SetSize(glm::vec2(20, 10));
-    cloud->SetTexture(_cloud[0]);
-    cloud->SetWorldWidth(_hor);
+    cloud.AddTexture(_cloud[0]);
+    cloud.AddTexture(_cloud[1]);
+    cloud.SetRange(_hor);
+    cloud.AddClouds(30);
 
 }
 
@@ -78,7 +78,7 @@ void Scene::paintGL()
     glBindTexture(GL_TEXTURE_2D, _spot);
 
     fw.Draw();
-    cloud->Draw();
+    cloud.Draw();
     DrawBackGround(_foreGround);
 }
 
@@ -105,7 +105,7 @@ void Scene::Update()
     oldTime = time;
 
     fw.Update(dt);
-    cloud->Update(dt);
+    cloud.Update(dt);
 
     _angle += 1;
     updateGL();

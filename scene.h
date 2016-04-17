@@ -37,7 +37,7 @@ private:
     GLuint _spot;
     GLuint _cloud[2];
 
-    Cloud *cloud;
+    CloudManager cloud;
 
     glm::vec3 ScreenToWorld(QPoint p);
     GLuint InitTexture(QString path);
