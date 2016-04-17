@@ -34,6 +34,11 @@ Scene::Scene(QWidget *parent) : QGLWidget(parent)
 
 void Scene::initializeGL()
 {
+
+    _hor = glm::vec2(-50, 50);
+    _vert = glm::vec2(-50, 50);
+    _depth = glm::vec2(2, -2);
+
     //qglClearColor(Qt::gray);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -42,6 +47,13 @@ void Scene::initializeGL()
     _spot = InitTexture("spot.png");
     _backGround = InitTexture("11.jpg");
     _foreGround = InitTexture("11.png");
+    _cloud[0] = InitTexture("cloud.png");
+    _cloud[1] = InitTexture("cloud1.png");
+
+    cloud = new Cloud(glm::vec3(0, 40, 0), glm::vec3(1, 0, 0));
+    cloud->SetSize(glm::vec2(20, 10));
+    cloud->SetTexture(_cloud[0]);
+    cloud->SetWorldWidth(_hor);
 
 }
 
@@ -49,10 +61,6 @@ void Scene::resizeGL(int w, int h)
 {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-
-    _hor = glm::vec2(-50, 50);
-    _vert = glm::vec2(-50, 50);
-    _depth = glm::vec2(2, -2);
 
     glOrtho(_hor.x, _hor.y, _vert.x, _vert.y, _depth.x, _depth.y);
     glViewport(0, 0, w, h);
@@ -68,30 +76,9 @@ void Scene::paintGL()
     DrawBackGround(_backGround);
 
     glBindTexture(GL_TEXTURE_2D, _spot);
-    /*drawAxis();
-
-    glRotated(_angle, 1, 0, 0);
-
-
-    glBindTexture(GL_TEXTURE_2D, textureId[0]);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    //glEnableClientState(GL_COLOR_ARRAY);
-
-    glBindTexture(GL_TEXTURE_2D, textureId[0]);
-
-    glVertexPointer(3, GL_FLOAT, 0, VertexArray);
-    // указываем, откуда нужно извлечь данные о массиве цветов вершин
-    glTexCoordPointer(2, GL_FLOAT, 0, textCoord);
-   // glColorPointer(3, GL_FLOAT, 0, ColorArray);
-    // используя массивы вершин и индексов, строим поверхноси
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, IndexArray);
-
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);*/
 
     fw.Draw();
+    cloud->Draw();
     DrawBackGround(_foreGround);
 }
 
@@ -118,6 +105,7 @@ void Scene::Update()
     oldTime = time;
 
     fw.Update(dt);
+    cloud->Update(dt);
 
     _angle += 1;
     updateGL();
@@ -162,21 +150,3 @@ void Scene::DrawBackGround(GLuint texture)
     glEnd();
 }
 
-void Scene::InitShader()
-{
-    shader = new QGLShaderProgram(this);
-
-
-   shader->addShaderFromSourceFile( QGLShader::Fragment, "fShader.fsh" );
-   shader->addShaderFromSourceFile( QGLShader::Vertex, "vShader.glsl" );
-
-
-   // Bind vertex array object
-   QOpenGLVertexArrayObject *vao = new QOpenGLVertexArrayObject( this );
-   vao->bind();
-
-   // Bind shader pipeline for use
-   shader->link();
-   shader->bind();
-
-}

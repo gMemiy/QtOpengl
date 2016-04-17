@@ -4,7 +4,6 @@
 #include <QGLWidget>
 #include <QtOpenGL>
 #include "firework.h"
-#include "QGLShaderProgram"
 
 class Scene : public QGLWidget
 {
@@ -35,14 +34,14 @@ private:
     GLuint _backGround;
     GLuint _foreGround;
     GLuint _spot;
+    GLuint _cloud[2];
 
-    QGLShaderProgram *shader;
+    Cloud *cloud;
 
     glm::vec3 ScreenToWorld(QPoint p);
     GLuint InitTexture(QString path);
     void drawAxis();
     void DrawBackGround(GLuint texture);
-    void InitShader();
 };
 
 #endif // SCENE_H
