@@ -4,6 +4,7 @@
 #include <QGLWidget>
 #include <QtOpenGL>
 #include "firework.h"
+#include "cloud.h"
 
 class Scene : public QGLWidget
 {

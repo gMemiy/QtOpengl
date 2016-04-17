@@ -18,9 +18,13 @@ SOURCES += main.cpp\
     scene.cpp \
     particle.cpp \
     particlesystem.cpp \
-    firework.cpp
+    firework.cpp \
+    object.cpp \
+    cloud.cpp
 
 HEADERS  += scene.h \
     particle.h \
     particlesystem.h \
-    firework.h
+    firework.h \
+    object.h \
+    cloud.h
