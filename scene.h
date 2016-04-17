@@ -37,6 +37,7 @@ private:
     glm::vec3 ScreenToWorld(QPoint p);
     GLuint InitTexture(QString path);
     void drawAxis();
+    void DrawBackGround();
 };
 
 #endif // SCENE_H

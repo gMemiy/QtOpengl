@@ -67,6 +67,8 @@ void Scene::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    DrawBackGround();
+
     glBindTexture(GL_TEXTURE_2D, _spot);
     /*drawAxis();
 
@@ -144,4 +146,20 @@ glm::vec3 Scene::ScreenToWorld(QPoint p)
     float x = (float)p.x() / (float)width() * (float)(abs(_hor.x) + abs(_hor.y)) - (float)abs(_hor.x);
     float y = ((float)height() - (float)p.y()) / (float)height() * (float)(abs(_vert.x) + abs(_vert.y)) - (float)abs(_vert.x);
     return glm::vec3( x, y, 0.f);
+}
+
+void Scene::DrawBackGround()
+{
+    glBindTexture(GL_TEXTURE_2D, _backGround);
+    glColor3f(1, 1, 1);
+    glBegin(GL_TRIANGLE_STRIP);
+        glTexCoord2f(0,0);
+        glVertex3fv(&glm::vec3(_hor.x, _vert.x, 0)[0]);
+        glTexCoord2f(0,1);
+        glVertex3fv(&glm::vec3(_hor.x, _vert.y, 0)[0]);
+        glTexCoord2f(1,0);
+        glVertex3fv(&glm::vec3(_hor.y, _vert.x, 0)[0]);
+        glTexCoord2f(1,1);
+        glVertex3fv(&glm::vec3(_hor.y, _vert.y, 0)[0]);
+    glEnd();
 }
