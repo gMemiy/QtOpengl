@@ -14,7 +14,7 @@ public:
 
     virtual void Draw();
     virtual void Update(float dt);
-    virtual void AddParticle();
+    void AddParticle();
     virtual bool IsAlive() override;
 
     void SetChildLifeTime(float lifeTime);

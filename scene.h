@@ -31,8 +31,11 @@ private:
     glm::vec2 _vert;
     glm::vec2 _depth;
 
+    GLuint _backGround;
+    GLuint _spot;
+
     glm::vec3 ScreenToWorld(QPoint p);
-    void InitTextures();
+    GLuint InitTexture(QString path);
     void drawAxis();
 };
 

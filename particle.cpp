@@ -49,6 +49,11 @@ glm::vec3 Object::GetPos()
     return _pos;
 }
 
+glm::vec4 Object::GetColor()
+{
+    return _color;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) :

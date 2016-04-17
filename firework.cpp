@@ -5,27 +5,26 @@ FireWork::FireWork()
 {
 }
 
-/*
- *
- *     _ps.SetChildSpeed(0.2f);
-    _ps.SetSize(0.5f);
-    _ps.SetSpeed(glm::vec3(2, 5, 0));
-    _ps.SetChildLifeTime(5.f);
-    _ps.SetGravity(glm::vec3(0, -1, 0));
-
-    _tail.SetChildSpeed(.9f);
-    _tail.SetColor(glm::vec4(0.8f, 0.9f, 0.8f, 1.f));
-    _tail.SetSize(0.3f);
-    _tail.SetSpeed(glm::vec3(0, 2, 0));
- */
-
-void FireWork::Push(glm::vec3 pos)
+float GetRand()
 {
-    auto b = QSharedPointer<ParticleSystem>(new ParticleSystem(1, pos, 100, 10));
-    b->SetSize(0.5f);
-    b->SetVelocity(glm::vec3(1, 5, 0));
-    b->SetChildLifeTime(5);
+    float k = rand() % 50;
+    return k / 50.f + 0.5f;
+}
+
+void FireWork::AddBullet(glm::vec3 pos, int level, float lifeTime, glm::vec3 vel, glm::vec4 color, float childLifeTime, float size, int count)
+{
+    auto b = QSharedPointer<ParticleSystem>(new ParticleSystem(level, pos, count, lifeTime));
+    b->SetSize(size);
+    b->SetVelocity(vel);
+    b->SetChildLifeTime(childLifeTime);
+    b->SetGravity(glm::vec3(0, -1, 0));
+    b->SetColor(color);
     _bullets.push_back(b);
+}
+
+void FireWork::Push(glm::vec3 pos, int lvl)
+{
+    AddBullet(pos, 1, 10, glm::vec3(0, 10, 0), glm::vec4(GetRand(), GetRand(), GetRand(), 1));
 }
 
 void FireWork::Update(float dt)
@@ -58,19 +57,15 @@ void FireWork::Update(float dt)
              int count = 5;
              float grad = 360.f / count;
              float g = grad;
-
+             glm::vec4 color(GetRand(), GetRand(), GetRand(), 1);
              for (int j = 0; j < count; ++j)
              {
-                 auto p = QSharedPointer<ParticleSystem>(new ParticleSystem(b->GetType() - 1, b->GetPos(), 100, 5));
-                 p->SetSize(0.5f);
                  glm::vec3 speed(5,0,0);
                  speed = glm::rotateZ(speed, (float)(rand() % 30 + g) /180.f*3.14f);
                  g += grad;
-                 p->SetVelocity(glm::vec3(speed.x, speed.y, 0));
-                 p->SetChildLifeTime(5);
-                 p->SetGravity(glm::vec3(0, -1, 0));
-                 _bullets.push_back(p);
+                 AddBullet(b->GetPos(), b->GetType() - 1, 5, speed, color);
              }
+             AddBullet(b->GetPos(), 0, 0.1f, glm::vec3(0), glm::vec4(1), 0.1f, 10, 1);
              b->SetType(0);
          }
      }

@@ -1,28 +1,22 @@
 #include "scene.h"
 
 
-
-GLuint textureId[1];
-
-void Scene::InitTextures()
+GLuint Scene::InitTexture(QString path)
 {
-    textureId[0] = 15;
+    GLuint textureId(0);
 
-    QImage pm(QString("spot.png"));
+    QImage pm(path);
     pm = QGLWidget::convertToGLFormat(pm);
     //textureId = bindTexture(pm, GL_TEXTURE_2D, GL_RGBA);
 
-    glGenTextures(1, textureId); // создаём два имени и записываем их в массив
+    glGenTextures(1, &textureId);
 
-       // создаём и связываем текстурные объекты с состоянием текстуры
-       // 1-ый текстурный объект
-       // создаём и связываем 1-ый текстурный объект с последующим состоянием текстуры
-    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+    glBindTexture(GL_TEXTURE_2D, textureId);
        // связываем текстурный объект с изображением
 
     glTexImage2D(GL_TEXTURE_2D, 0, 4, (GLsizei)pm.width(), (GLsizei)pm.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pm.bits());
 
-    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+    glBindTexture(GL_TEXTURE_2D, textureId);
     // задаём линейную фильтрацию вблизи:
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
        // задаём линейную фильтрацию вдали:
@@ -31,7 +25,9 @@ void Scene::InitTextures()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MULT);
+
+    return textureId;
 }
 
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
@@ -41,13 +37,13 @@ Scene::Scene(QWidget *parent) : QGLWidget(parent)
 
 void Scene::initializeGL()
 {
-    qglClearColor(Qt::gray);
+    //qglClearColor(Qt::gray);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glEnable(GL_BLEND);
-    InitTextures();
-
+    _spot = InitTexture("spot.png");
+    _backGround = InitTexture("back.png");
 
 }
 
@@ -71,7 +67,7 @@ void Scene::paintGL()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glBindTexture(GL_TEXTURE_2D, textureId[0]);
+    glBindTexture(GL_TEXTURE_2D, _spot);
     /*drawAxis();
 
     glRotated(_angle, 1, 0, 0);
@@ -102,30 +98,6 @@ void Scene::paintGL()
 
 void Scene::drawAxis()
 {
-   // устанавливаем ширину линии приближенно в пикселях
-   glLineWidth(3.0f);
-   // до вызова здесь команды ширина была равна 1 пикселю по умолчанию
-
-   // устанавливаем цвет последующих примитивов
-   glColor4f(1.00f, 0.00f, 0.00f, 1.0f);
-   // ось x красного цвета
-   glBegin(GL_LINES); // построение линии
-      glVertex3f( 1.0f,  0.0f,  0.0f); // первая точка
-      glVertex3f(-1.0f,  0.0f,  0.0f); // вторая точка
-   glEnd();
-
-   QColor halfGreen(0, 128, 0, 255);
-   qglColor(halfGreen);
-   glBegin(GL_LINES);
-      // ось y зеленого цвета
-      glVertex3f( 0.0f,  1.0f,  0.0f);
-      glVertex3f( 0.0f, -1.0f,  0.0f);
-
-      glColor4f(0.00f, 0.00f, 1.00f, 1.0f);
-      // ось z синего цвета
-      glVertex3f( 0.0f,  0.0f,  1.0f);
-      glVertex3f( 0.0f,  0.0f, -1.0f);
-   glEnd();
 }
 
 void Scene::Update()
@@ -164,12 +136,7 @@ void Scene::Update()
 
 void Scene::mousePressEvent(QMouseEvent* pe) // нажатие клавиши мыши
 {
-   // при нажатии пользователем кнопки мыши переменной ptrMousePosition
-   // будет присвоена координата указателя мыши
-   //_ps.SetPos(ScreenToWorld(pe->pos()));
-    //_tail.SetPos(ScreenToWorld(pe->pos()));
-   // ptrMousePosition = (*pe).pos(); // можно и так написать
-    fw.Push(ScreenToWorld(pe->pos()));
+    fw.Push(ScreenToWorld(pe->pos()), 1);
 }
 
 glm::vec3 Scene::ScreenToWorld(QPoint p)
