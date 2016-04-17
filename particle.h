@@ -35,6 +35,7 @@ public:
     virtual void Update(float dt);
     virtual bool IsAlive();
     virtual void SetSize(float size);
+    float GetSize();
     virtual void SetMaxSpeed(float maxSpeed);
     virtual void SetLifeTime(float lifeTime);
 

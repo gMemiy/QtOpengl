@@ -12,6 +12,7 @@ void ParticleSystem::AddParticle()
 {
     QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _childLifeTime, _size, _speed));
     p->SetColor(_color);
+    p->SetGravity(_gravity / 4.f);
     _particles.push_back(p);
 }
 

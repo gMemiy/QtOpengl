@@ -73,7 +73,7 @@ Particle::~Particle()
 void Particle::Draw()
 {
 
-    float alpha = _lifeTimer / _lifeTime + 0.2f;
+    float alpha = _lifeTimer / _lifeTime + 0.1f;
     _color.a *= alpha;
 
     glColor4fv(&_color[0]);
@@ -112,6 +112,11 @@ bool Particle::IsAlive()
 void Particle::SetSize(float size)
 {
     _size = size;
+}
+
+float Particle::GetSize()
+{
+    return _size;
 }
 
 void Particle::SetMaxSpeed(float maxSpeed)
