@@ -1,9 +1,22 @@
 #include "cloud.h"
 
 
-Cloud::Cloud(glm::vec3 pos, glm::vec3 vel): Object(pos, vel)
+Cloud::Cloud() : Object()
   , _range(-1, 1)
   , _texture(0)
+{
+
+}
+
+Cloud::Cloud(glm::vec3 pos, glm::vec3 vel): Object()
+  , _range(-1, 1)
+  , _texture(0)
+{
+    _pos = pos;
+    _vel = vel;
+}
+
+Cloud::~Cloud()
 {
 
 }
@@ -56,8 +69,15 @@ void Cloud::SetTexture(GLuint texture)
 }
 
 
-CloudManager::CloudManager()
+CloudManager::CloudManager() :
+    _range(-1, 1)
 {
+}
+
+CloudManager::~CloudManager()
+{
+    _clouds.clear();
+    _textures.clear();
 }
 
 void CloudManager::AddTexture(GLuint texture)

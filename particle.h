@@ -6,15 +6,20 @@
 class Particle : public Object
 {
 public:
-    Particle(glm::vec3 pos = glm::vec3(0), float lifeTime = 0, float size = 0.5f, float speedMax = 0.2f);
+    Particle();
+    Particle(glm::vec3 pos, float lifeTime, float size, float speedMax);
     virtual ~Particle();
+
     virtual void Draw();
     virtual void Update(float dt);
+
     virtual bool IsAlive();
-    virtual void SetSize(float size);
+
+    void SetSize(float size);
+    void SetMaxSpeed(float maxSpeed);
+    void SetLifeTime(float lifeTime);
+
     float GetSize();
-    virtual void SetMaxSpeed(float maxSpeed);
-    virtual void SetLifeTime(float lifeTime);
 
 protected:
 

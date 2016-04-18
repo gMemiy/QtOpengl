@@ -3,12 +3,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
+Particle::Particle() : Object()
+  , _lifeTime(0)
+  , _lifeTimer(_lifeTime)
+  , _size(1)
+{
+
+}
+
 Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) :
-    Object(pos)
+    Object()
   ,  _size(size)
   ,  _lifeTime(lifeTime)
   , _lifeTimer(lifeTime)
 {
+    _pos = pos;
     SetMaxSpeed(maxSpeed);
 }
 

@@ -1,12 +1,33 @@
 #include "particlesystem.h"
 #include "glm/gtx/rotate_vector.hpp"
 
-ParticleSystem::ParticleSystem(int type, glm::vec3 pos, int count, float lifeime,  float speed, float size) : Particle(pos, lifeime, size)
+ParticleSystem::ParticleSystem() :
+    Particle()
+  , _type()
+  , _count()
+  , _spawnTime()
+  , _spawnTimer()
+  , _speed()
+  , _childLifeTime()
+{
+
+}
+
+ParticleSystem::ParticleSystem(int type, glm::vec3 pos, int count, float lifeime,  float speed, float size) :
+    Particle(pos, lifeime, size, 0)
   , _type(type)
   , _count(count)
+  , _spawnTime(0)
+  , _spawnTimer(0)
   , _speed(speed)
+  , _childLifeTime(1)
 {
     SetChildLifeTime(1);
+}
+
+ParticleSystem::~ParticleSystem()
+{
+    _particles.clear();
 }
 
 void ParticleSystem::AddParticle()

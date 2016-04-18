@@ -1,10 +1,19 @@
 #include "object.h"
 
-Object::Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color):
+Object::Object():
+    _pos(0)
+  , _vel(0)
+  , _gravity(0)
+  , _color(1)
+{
+
+}
+
+Object::Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color, glm::vec3 gravity):
     _pos(pos)
   , _vel(vel)
   , _color(color)
-  , _gravity(glm::vec3(0))
+  , _gravity(gravity)
 {
 
 }
