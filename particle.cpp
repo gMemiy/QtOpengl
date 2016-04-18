@@ -88,5 +88,6 @@ void Particle::SetMaxSpeed(float maxSpeed)
 void Particle::SetLifeTime(float lifeTime)
 {
     _lifeTime = lifeTime;
+    _lifeTimer = lifeTime;
 }
 

@@ -3,14 +3,13 @@
 
 ParticleSystem::ParticleSystem() :
     Particle()
-  , _type()
-  , _count()
-  , _spawnTime()
-  , _spawnTimer()
-  , _speed()
-  , _childLifeTime()
+  , _type(0)
+  , _count(1)
+  , _spawnTime(1)
+  , _spawnTimer(1)
+  , _speed(1)
+  , _childLifeTime(1)
 {
-
 }
 
 ParticleSystem::ParticleSystem(int type, glm::vec3 pos, int count, float lifeime,  float speed, float size) :
@@ -36,6 +35,12 @@ void ParticleSystem::AddParticle()
     p->SetColor(_color);
     p->SetGravity(_gravity / 4.f);
     _particles.push_back(p);
+}
+
+void ParticleSystem::SetCount(int count)
+{
+    _count = count;
+    SetChildLifeTime(_childLifeTime);
 }
 
 void ParticleSystem::UpdateChild(float dt)
@@ -132,7 +137,7 @@ bool ParticleSystem::IsEnd()
 /////////////////////////////////////////////////////////////////////////////
 
 
-Boom::Boom() : ParticleSystem(0)
+Boom::Boom() : ParticleSystem()
 {
 }
 

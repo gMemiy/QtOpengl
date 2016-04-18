@@ -10,7 +10,7 @@ class ParticleSystem : public Particle
 public:
 
     ParticleSystem();
-    ParticleSystem(int type, glm::vec3 pos = glm::vec3(0), int count = 300, float lifeime = 0.f, float speed = 0.5f, float size = 0.1f);
+    ParticleSystem(int type, glm::vec3 pos, int count, float lifeime, float speed, float size);
     virtual ~ParticleSystem();
 
     virtual void Draw();
@@ -20,6 +20,7 @@ public:
 
     void AddParticle();
 
+    void SetCount(int count);
     void SetChildLifeTime(float lifeTime);
     void SetChildSpeed(float speed);
     void SetType(int type);
@@ -28,6 +29,7 @@ public:
     int GetType();
 
     bool IsEnd();
+
 protected:
 
     void UpdateChild(float dt);
