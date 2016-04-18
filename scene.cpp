@@ -1,4 +1,6 @@
 #include "scene.h"
+//#include "glext.h"
+
 
 
 GLuint Scene::InitTexture(QString path)
@@ -22,8 +24,6 @@ GLuint Scene::InitTexture(QString path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MULT);
-
     return textureId;
 }
 
@@ -42,8 +42,10 @@ void Scene::initializeGL()
     //qglClearColor(Qt::gray);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glBlendFunc(GL_SRC_ALPHA, GL_MAX);
 
     glEnable(GL_BLEND);
+
     _spot = InitTexture("spot.png");
     _backGround = InitTexture("11.jpg");
     _foreGround = InitTexture("11.png");
@@ -77,7 +79,10 @@ void Scene::paintGL()
 
     glBindTexture(GL_TEXTURE_2D, _spot);
 
+
+
     fw.Draw();
+    glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
     cloud.Draw();
     DrawBackGround(_foreGround);
 }

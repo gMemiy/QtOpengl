@@ -22,12 +22,21 @@ void FireWork::AddBullet(glm::vec3 pos, int level, float lifeTime, glm::vec3 vel
     _bullets.push_back(b);
 }
 
+void FireWork::AddBoom(glm::vec3 pos, float lifeTime, glm::vec4 color, float childLifeTime, float size, float speed, int count)
+{
+    auto b = new Boom(pos, count, lifeTime, speed, size);
+    b->SetColor(color);
+    b->AddAllParticles();
+    auto newBoom = QSharedPointer<ParticleSystem>(b);
+    _bullets.push_back(newBoom);
+}
+
 void FireWork::Push(glm::vec3 pos, int lvl)
 {
     //AddBullet(glm::vec3 pos, int level, float lifeTime, glm::vec3 vel, glm::vec4 color, float childLifeTime, float size, int count)
     float speed = float(rand() % 20) + 20.f;
     float size = speed / 30.f;
-    AddBullet(pos, 1, 2, glm::vec3(0, speed, 0), glm::vec4(GetRand(), GetRand(), GetRand(), 1), 3, size, 500);
+    AddBullet(pos, 1, 2, glm::vec3(0, speed, 0), glm::vec4(GetRand(), GetRand(), GetRand(), 1), 3, size, 400);
 }
 
 void FireWork::Update(float dt)
@@ -64,12 +73,13 @@ void FireWork::Update(float dt)
              glm::vec4 color(GetRand(), GetRand(), GetRand(), 1);
              for (int j = 0; j < count; ++j)
              {
-                 glm::vec3 speed(s,0,0);
+                 glm::vec3 speed(s * b->GetSize(),0,0);
                  speed = glm::rotateZ(speed, (float)(rand() % 30 + g) /180.f*3.14f);
                  g += grad;
                  AddBullet(b->GetPos(), b->GetType() - 1, 3, speed, color, 5, b->GetSize(), 500);
              }
-             AddBullet(b->GetPos(), 0, 0.1f, glm::vec3(0), glm::vec4(1), 0.3f, 20, 1);
+             AddBullet(b->GetPos(), 0, 0.1f, glm::vec3(0), glm::vec4(1), 0.3f, 30 * b->GetSize(), 1);
+             AddBoom(b->GetPos(), 0.1f, color, 5, b->GetSize(), 20.f * b->GetSize());
              b->SetType(0);
          }
      }

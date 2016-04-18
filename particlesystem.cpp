@@ -1,4 +1,5 @@
 #include "particlesystem.h"
+#include "glm/gtx/rotate_vector.hpp"
 
 ParticleSystem::ParticleSystem(int type, glm::vec3 pos, int count, float lifeime,  float speed, float size) : Particle(pos, lifeime, size)
   , _type(type)
@@ -14,6 +15,27 @@ void ParticleSystem::AddParticle()
     p->SetColor(_color);
     p->SetGravity(_gravity / 4.f);
     _particles.push_back(p);
+}
+
+void ParticleSystem::UpdateChild(float dt)
+{
+    std::vector<int> dead;
+    int i = 0;
+    for ( std::vector< QSharedPointer<Particle> >::iterator p = _particles.begin(); p != _particles.end(); ++p, ++i)
+    {
+        (*p)->Update(dt);
+        if (!(*p)->IsAlive())
+        {
+            dead.push_back(i);
+        }
+    }
+
+    while (!dead.empty())
+    {
+        int index = dead.back();
+        dead.pop_back();
+        _particles.erase(_particles.begin() + index);
+    }
 }
 
 void ParticleSystem::Update(float dt)
@@ -35,23 +57,7 @@ void ParticleSystem::Update(float dt)
         }
     }
 
-    std::vector<int> dead;
-    int i = 0;
-    for ( std::vector< QSharedPointer<Particle> >::iterator p = _particles.begin(); p != _particles.end(); ++p, ++i)
-    {
-        (*p)->Update(dt);
-        if (!(*p)->IsAlive())
-        {
-            dead.push_back(i);
-        }
-    }
-
-    while (!dead.empty())
-    {
-        int index = dead.back();
-        dead.pop_back();
-        _particles.erase(_particles.begin() + index);
-    }
+    UpdateChild(dt);
 
 }
 
@@ -100,3 +106,43 @@ bool ParticleSystem::IsEnd()
 {
     return !(_lifeTimer >= 0);
 }
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+Boom::Boom() : ParticleSystem(0)
+{
+}
+
+Boom::Boom(glm::vec3 pos, int count, float lifeTime, float childSpeed, float size) :
+    ParticleSystem(0, pos, count, lifeTime, childSpeed, size)
+{
+}
+
+void Boom::AddAllParticles()
+{
+    float grad = 360.f / (float) _count;
+    float angle = 0;
+    for (int i = 0; i < _count; ++i)
+    {
+        QSharedPointer<Particle> p = QSharedPointer<Particle>(new Particle(_pos, _childLifeTime, _size, _speed));
+        p->SetColor(_color);
+        p->SetGravity(_gravity / 4.f);
+
+        glm::vec3 speed(_speed, 0, 0);
+        speed = glm::rotateZ(speed, angle);
+        p->SetVelocity(speed);
+        angle += grad;
+
+        _particles.push_back(p);
+    }
+}
+
+void Boom::Update(float dt)
+{
+    Particle::Update(dt);
+    UpdateChild(dt);
+}
+
+

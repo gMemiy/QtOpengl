@@ -23,8 +23,8 @@ public:
     int GetType();
     void SetType(int type);
     bool IsEnd();
-private:
-
+protected:
+    void UpdateChild(float dt);
     std::vector< QSharedPointer <Particle> > _particles;
     int _type;
     int _count;
@@ -33,6 +33,15 @@ private:
     float _speed;
 
     float _childLifeTime;
+};
+
+class Boom : public ParticleSystem
+{
+public:
+    Boom();
+    Boom(glm::vec3 pos, int count, float lifeTime, float childSpeed, float size);
+    void AddAllParticles();
+    virtual void Update(float dt);
 };
 
 #endif // PARTICLESYSTEM_H
