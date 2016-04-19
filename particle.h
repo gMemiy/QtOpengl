@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-class Particle : public Object
+class Particle : public Object // тот же объект, только с размером и временем жизни
 {
 public:
     Particle();

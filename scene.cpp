@@ -8,6 +8,12 @@ GLuint Scene::InitTexture(QString path)
     GLuint textureId(0);
 
     QImage pm(path);
+    if (pm.isNull())
+    {
+        setWindowTitle("no image: " + path);
+        isAllLoad = false;
+        return 0;
+    }
     pm = QGLWidget::convertToGLFormat(pm);
 
     glGenTextures(1, &textureId);
@@ -29,7 +35,8 @@ GLuint Scene::InitTexture(QString path)
 
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
 {
-    _angle = 0;
+    isAllLoad = true;
+    resize(1024, 768);
 }
 
 void Scene::initializeGL()
@@ -39,23 +46,24 @@ void Scene::initializeGL()
     _vert = glm::vec2(-50, 50);
     _depth = glm::vec2(2, -2);
 
-    //qglClearColor(Qt::gray);
     glEnable(GL_TEXTURE_2D);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //glBlendFunc(GL_SRC_ALPHA, GL_MAX);
 
     glEnable(GL_BLEND);
 
     _spot = InitTexture("spot.png");
-    _backGround = InitTexture("11.jpg");
-    _foreGround = InitTexture("11.png");
+    _backGround = InitTexture("background.jpg");
+    _foreGround = InitTexture("forest.png");
     _cloud[0] = InitTexture("cloud.png");
     _cloud[1] = InitTexture("cloud1.png");
 
-    cloud.AddTexture(_cloud[0]);
-    cloud.AddTexture(_cloud[1]);
-    cloud.SetRange(_hor);
-    cloud.AddClouds(30);
+    if (isAllLoad)
+    {
+        cloud.AddTexture(_cloud[0]);
+        cloud.AddTexture(_cloud[1]);
+        cloud.SetRange(_hor);
+        cloud.AddClouds(30);
+    }
 
 }
 
@@ -72,6 +80,11 @@ void Scene::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    if (!isAllLoad)
+    {
+        return;
+    }
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -87,13 +100,12 @@ void Scene::paintGL()
     DrawBackGround(_foreGround);
 }
 
-
-void Scene::drawAxis()
-{
-}
-
 void Scene::Update()
 {
+    if (!isAllLoad)
+    {
+        return;
+    }
     static float t = 0.f;
     static float oldTime;
     static QTime *timer;
@@ -112,7 +124,6 @@ void Scene::Update()
     fw.Update(dt);
     cloud.Update(dt);
 
-    _angle += 1;
     updateGL();
 
     static int fps = 0;
@@ -121,7 +132,7 @@ void Scene::Update()
     if (t >= 1)
     {
         int pCount = fw.ParticleCount();
-        setWindowTitle(QString::number(fps) + " " + QString::number(pCount));
+        setWindowTitle("fps = " + QString::number(fps) + " | particles count = " + QString::number(pCount));
         t = 0;
         fps = 0;
     }
@@ -141,6 +152,11 @@ glm::vec3 Scene::ScreenToWorld(QPoint p)
 
 void Scene::DrawBackGround(GLuint texture)
 {
+    if (!isAllLoad)
+    {
+        return;
+    }
+
     glBindTexture(GL_TEXTURE_2D, texture);
     glColor3f(1, 1, 1);
     glBegin(GL_TRIANGLE_STRIP);

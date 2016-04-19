@@ -43,7 +43,7 @@ void Cloud::Draw()
 void Cloud::Update(float dt)
 {
     Object::Update(dt);
-    if (_pos.x > _range.y + _size.x / 2.f)
+    if (_pos.x > _range.y + _size.x / 2.f) // если вышли центром за пределы указанного диапазона, перескакиваем на его другую сторону
     {
         _pos.x = _range.x - _size.x / 2.f;
     }
@@ -94,14 +94,15 @@ void CloudManager::AddClouds(int count)
     for (int i = 0; i < count; ++i)
     {
         float posX = rand() % (int)(abs(_range.x) + abs(_range.y)) - abs(_range.x);
-        float posY = rand() % 20 + 35;
-        float vel = (float)(rand() % 10 - 5) / 10.f;
+        float posY = rand() % 25 + 25;
+        float vel = (float)(rand() % 20 - 10) / 10.f;
         float size = rand() % 40 + 20;
         GLuint texture = rand() % (_textures.size() - 1);
         auto c = QSharedPointer<Cloud>(new Cloud(glm::vec3(posX, posY, 0), glm::vec3(vel, 0, 0)));
         c->SetRange(_range);
         c->SetSize(glm::vec2(size, size / 2.f));
         c->SetTexture(_textures[texture]);
+        c->SetColor(glm::vec4(0.1f, 0.1f, 0.1f, 0.7f));
         _clouds.push_back(c);
     }
 }

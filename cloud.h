@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-class Cloud : public Object
+class Cloud : public Object // объект, знающий о своём размере и текстуре
 {
 public:
 
@@ -20,7 +20,7 @@ public:
 
 private:
     glm::vec2 _size;
-    glm::vec2 _range;
+    glm::vec2 _range; // область, в которой облако будет двигаться
     GLuint _texture;
 };
 
@@ -36,12 +36,12 @@ public:
 
     void SetRange(glm::vec2 range);
     void AddTexture(GLuint texture);
-    void AddClouds(int count);
+    void AddClouds(int count); // добавить count облаков в случайные места со случайной текстурой
 
 private:
-    std::vector<QSharedPointer<Cloud>> _clouds;
-    std::vector<GLuint> _textures;
-    glm::vec2 _range;
+    std::vector<QSharedPointer<Cloud>> _clouds; // облака
+    std::vector<GLuint> _textures; // текстуры облаокв
+    glm::vec2 _range; // область существования облаков
 };
 
 

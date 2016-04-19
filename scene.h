@@ -6,7 +6,7 @@
 #include "firework.h"
 #include "cloud.h"
 
-class Scene : public QGLWidget
+class Scene : public QGLWidget // класс для работы с  окном
 {
     Q_OBJECT
 public:
@@ -24,25 +24,25 @@ protected:
 
 
 private:
-    GLint _angle;
-    FireWork fw;
 
+    FireWork fw; // фейерверк
 
-    glm::vec2 _hor;
-    glm::vec2 _vert;
-    glm::vec2 _depth;
+    bool isAllLoad;
+    // размеры сцены
+    glm::vec2 _hor; // горизонталь
+    glm::vec2 _vert; // вертикаль
+    glm::vec2 _depth; // глубина
 
-    GLuint _backGround;
-    GLuint _foreGround;
-    GLuint _spot;
-    GLuint _cloud[2];
+    GLuint _backGround; // задний фон
+    GLuint _foreGround; // пережний фон
+    GLuint _spot; // текстура частицы
+    GLuint _cloud[2]; // текстуры облаков
 
-    CloudManager cloud;
+    CloudManager cloud; // менеджер облаков
 
-    glm::vec3 ScreenToWorld(QPoint p);
-    GLuint InitTexture(QString path);
-    void drawAxis();
-    void DrawBackGround(GLuint texture);
+    glm::vec3 ScreenToWorld(QPoint p); // перевод оконнх координат в координаты сцены
+    GLuint InitTexture(QString path); // загрузка текстуры из файла
+    void DrawBackGround(GLuint texture); // рисует прямоугольник на весь экран, с заданной текстурой
 };
 
 #endif // SCENE_H

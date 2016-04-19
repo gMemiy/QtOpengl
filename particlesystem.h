@@ -5,12 +5,11 @@
 //#include "bits/shared_ptr.h"
 #include "QSharedPointer"
 
-class ParticleSystem : public Particle
+class ParticleSystem : public Particle // та же частица, только пораждает другие частицы. Рождает частицы в течении всего времени своей жизни, равномерно распределяя их во времени
 {
 public:
 
     ParticleSystem();
-    ParticleSystem(int type, glm::vec3 pos, int count, float lifeime, float speed, float size);
     virtual ~ParticleSystem();
 
     virtual void Draw();
@@ -23,10 +22,10 @@ public:
     void SetCount(int count);
     void SetChildLifeTime(float lifeTime);
     void SetChildSpeed(float speed);
-    void SetType(int type);
+    void SetLevel(int level);
 
     int GetCount();
-    int GetType();
+    int GetLevel();
 
     bool IsEnd();
 
@@ -35,19 +34,18 @@ protected:
     void UpdateChild(float dt);
 
     std::vector< QSharedPointer <Particle> > _particles;
-    int _type;
-    int _count;
-    float _spawnTime;
+    int _level; // уровень ракеты.
+    int _count; // количество частиц
+    float _spawnTime; // время, за которое рождается 1 частица
     float _spawnTimer;
-    float _speed;
-    float _childLifeTime;
+    float _speed; // максимальная скорость частиц
+    float _childLifeTime;  // время жизни частиц
 };
 
-class Boom : public ParticleSystem
+class Boom : public ParticleSystem // рождает все частицы одновременно и равномерно распределяет их по окружности
 {
 public:
     Boom();
-    Boom(glm::vec3 pos, int count, float lifeTime, float childSpeed, float size);
     void AddAllParticles();
     virtual void Update(float dt);
 };

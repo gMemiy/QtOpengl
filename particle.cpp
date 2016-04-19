@@ -1,5 +1,5 @@
 #include "particle.h"
-
+#include "glm/gtx/rotate_vector.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -51,7 +51,7 @@ void Particle::Update(float dt)
     if (_lifeTimer >= 0)
     {
         Object::Update(dt);
-        if (_lifeTime > 0)
+        if (_lifeTime > 0) // частица с _lifeTime = 0 живёт вечно (как и система частиц)
         {
             _lifeTimer -= dt;
         }
@@ -75,14 +75,13 @@ float Particle::GetSize()
     return _size;
 }
 
-void Particle::SetMaxSpeed(float maxSpeed)
+void Particle::SetMaxSpeed(float maxSpeed) // частица буедт иметь скорость в случайном направлении
 {
     float speed = (float)((float)(rand() % 10) * maxSpeed - 5.f * maxSpeed) / (10.f );
-    _vel.x = speed;
-    speed = (float)((float)(rand() % 10) * maxSpeed - 5.f * maxSpeed) / (10.f);
-    _vel.y = speed;
-    speed = (float)((float)(rand() % 10) * maxSpeed - 5.f * maxSpeed) / (10.f);
-    _vel.z = speed;
+
+    _vel = glm::vec3(speed, 0, 0);
+    _vel = glm::rotateZ(_vel, (float)(rand() % 360) / 180.f * 3.14f);
+
 }
 
 void Particle::SetLifeTime(float lifeTime)

@@ -6,7 +6,7 @@
 #include "glm/glm.hpp"
 
 
-class Object
+class Object // объект, имеющий своё положение и скорость в пространстве и цвет.
 {
 public:
 
