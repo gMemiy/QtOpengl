@@ -8,10 +8,10 @@ GLuint Scene::InitTexture(QString path)
     GLuint textureId(0);
 
     QImage pm(path);
-    if (pm.isNull())
+    if (pm.isNull()) // проверка на загрузку текстуры
     {
         setWindowTitle("no image: " + path);
-        isAllLoad = false;
+        _isAllLoad = false;
         return 0;
     }
     pm = QGLWidget::convertToGLFormat(pm);
@@ -35,8 +35,14 @@ GLuint Scene::InitTexture(QString path)
 
 Scene::Scene(QWidget *parent) : QGLWidget(parent)
 {
-    isAllLoad = true;
+    _isAllLoad = true;
     resize(1024, 768);
+    _timer = QSharedPointer<QTime>(new QTime());
+    _timer->start();
+    _oldTime = (float)_timer->msecsTo(QTime::currentTime()) / 1000.f;
+
+    _sec = 0;
+    _fps = 0;
 }
 
 void Scene::initializeGL()
@@ -51,18 +57,19 @@ void Scene::initializeGL()
 
     glEnable(GL_BLEND);
 
-    _spot = InitTexture("spot.png");
-    _backGround = InitTexture("background.jpg");
-    _foreGround = InitTexture("forest.png");
-    _cloud[0] = InitTexture("cloud.png");
-    _cloud[1] = InitTexture("cloud1.png");
+    QString path("images/");
+    _spot = InitTexture(path + "spot.png");
+    _backGround = InitTexture(path + "background.jpg");
+    _foreGround = InitTexture(path + "forest.png");
+    _cloudTextures[0] = InitTexture(path + "cloud.png");
+    _cloudTextures[1] = InitTexture(path + "cloud1.png");
 
-    if (isAllLoad)
+    if (_isAllLoad)
     {
-        cloud.AddTexture(_cloud[0]);
-        cloud.AddTexture(_cloud[1]);
-        cloud.SetRange(_hor);
-        cloud.AddClouds(30);
+        _cloud.AddTexture(_cloudTextures[0]);
+        _cloud.AddTexture(_cloudTextures[1]);
+        _cloud.SetRange(_hor);
+        _cloud.AddClouds(30);
     }
 
 }
@@ -80,7 +87,7 @@ void Scene::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    if (!isAllLoad)
+    if (!_isAllLoad) // не загрузили текстуру? тогда и рисовать нечего
     {
         return;
     }
@@ -94,53 +101,53 @@ void Scene::paintGL()
 
 
 
-    fw.Draw();
+    _fw.Draw();
     glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
-    cloud.Draw();
+    _cloud.Draw();
     DrawBackGround(_foreGround);
+}
+
+float Scene::GetDt()
+{
+    float time = (float)_timer->msecsTo(QTime::currentTime()) / 1000.f;
+    float dt = time - _oldTime;
+    _oldTime = time;
+    return dt;
+}
+
+void Scene::UpdateStatistic(float dt)
+{
+    _fps++;
+    _sec += dt;
+    if (_sec >= 1)
+    {
+        int pCount = _fw.ParticleCount();
+        setWindowTitle("fps = " + QString::number(_fps) + " | particles count = " + QString::number(pCount));
+        _sec -= 1;
+        _fps = 0;
+    }
 }
 
 void Scene::Update()
 {
-    if (!isAllLoad)
+    if (!_isAllLoad) // и обновлять тоже. (хотя можно было бы)
     {
         return;
     }
-    static float t = 0.f;
-    static float oldTime;
-    static QTime *timer;
-    if (!timer)
-    {
-        timer = new QTime();
-        timer->start();
-        oldTime = (float)timer->msecsTo(QTime::currentTime()) / 1000.f;
-    }
-    float time = (float)timer->msecsTo(QTime::currentTime()) / 1000.f;
 
+    float dt = GetDt();
 
-    float dt = time - oldTime;
-    oldTime = time;
-
-    fw.Update(dt);
-    cloud.Update(dt);
+    _fw.Update(dt);
+    _cloud.Update(dt);
 
     updateGL();
 
-    static int fps = 0;
-    fps++;
-    t += dt;
-    if (t >= 1)
-    {
-        int pCount = fw.ParticleCount();
-        setWindowTitle("fps = " + QString::number(fps) + " | particles count = " + QString::number(pCount));
-        t = 0;
-        fps = 0;
-    }
+    UpdateStatistic(dt);
 }
 
 void Scene::mousePressEvent(QMouseEvent* pe) // нажатие клавиши мыши
 {
-    fw.Push(ScreenToWorld(pe->pos()), 1);
+    _fw.Push(ScreenToWorld(pe->pos()), 1);
 }
 
 glm::vec3 Scene::ScreenToWorld(QPoint p)
@@ -152,7 +159,7 @@ glm::vec3 Scene::ScreenToWorld(QPoint p)
 
 void Scene::DrawBackGround(GLuint texture)
 {
-    if (!isAllLoad)
+    if (!_isAllLoad)
     {
         return;
     }

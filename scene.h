@@ -25,9 +25,9 @@ protected:
 
 private:
 
-    FireWork fw; // фейерверк
+    FireWork _fw; // фейерверк
 
-    bool isAllLoad;
+    bool _isAllLoad;
     // размеры сцены
     glm::vec2 _hor; // горизонталь
     glm::vec2 _vert; // вертикаль
@@ -36,13 +36,20 @@ private:
     GLuint _backGround; // задний фон
     GLuint _foreGround; // пережний фон
     GLuint _spot; // текстура частицы
-    GLuint _cloud[2]; // текстуры облаков
+    GLuint _cloudTextures[2]; // текстуры облаков
 
-    CloudManager cloud; // менеджер облаков
+    QSharedPointer<QTime> _timer;
+    float _oldTime;
+    int _fps;
+    float _sec;
+
+    CloudManager _cloud; // менеджер облаков
 
     glm::vec3 ScreenToWorld(QPoint p); // перевод оконнх координат в координаты сцены
     GLuint InitTexture(QString path); // загрузка текстуры из файла
     void DrawBackGround(GLuint texture); // рисует прямоугольник на весь экран, с заданной текстурой
+    float GetDt();
+    void UpdateStatistic(float dt);
 };
 
 #endif // SCENE_H
