@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui opengl
+#LIBS += -lopengl32
 
 QMAKE_CXXFLAGS += -std=c++0x
 
