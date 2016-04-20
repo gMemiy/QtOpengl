@@ -68,9 +68,14 @@ void Cloud::SetTexture(GLuint texture)
     _texture = texture;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 CloudManager::CloudManager() :
     _range(-1, 1)
+  , _vertRange(-1, 1)
+  , _color(1)
+  , _maxSpeed(0)
+  , _maxSize(1)
 {
 }
 
@@ -94,15 +99,15 @@ void CloudManager::AddClouds(int count)
     for (int i = 0; i < count; ++i)
     {
         float posX = rand() % (int)(abs(_range.x) + abs(_range.y)) - abs(_range.x);
-        float posY = rand() % 25 + 25;
-        float vel = (float)(rand() % 20 - 10) / 10.f;
-        float size = rand() % 40 + 20;
+        float posY = rand() % (int)(_vertRange.y - _vertRange.x) + _vertRange.x;
+        float vel = (float)(rand() % (int)(_maxSpeed * 100) - _maxSpeed * 50) / 100.f;
+        float size = rand() % (int)(_maxSize / 2) + _maxSize / 2;
         GLuint texture = rand() % (_textures.size() - 1);
         auto c = QSharedPointer<Cloud>(new Cloud(glm::vec2(posX, posY), glm::vec2(vel, 0)));
         c->SetRange(_range);
         c->SetSize(glm::vec2(size, size / 2.f));
         c->SetTexture(_textures[texture]);
-        c->SetColor(glm::vec4(0.1f, 0.1f, 0.1f, 0.7f));
+        c->SetColor(_color);
         _clouds.push_back(c);
     }
 }
@@ -126,4 +131,30 @@ void CloudManager::Update(float dt)
 void CloudManager::SetRange(glm::vec2 range)
 {
     _range = range;
+}
+
+
+void CloudManager::SetHorizontalRange(glm::vec2 range)
+{
+    _range = range;
+}
+
+void CloudManager::SetVerticalRange(glm::vec2 range)
+{
+    _vertRange = range;
+}
+
+void CloudManager::SetMaxSpeed(float speed)
+{
+    _maxSpeed = speed;
+}
+
+void CloudManager::SetMaxSize(float size)
+{
+    _maxSize = size;
+}
+
+void CloudManager::SetColor(glm::vec4 color)
+{
+    _color = color;
 }

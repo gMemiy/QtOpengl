@@ -37,11 +37,20 @@ public:
     void SetRange(glm::vec2 range);
     void AddTexture(GLuint texture);
     void AddClouds(int count); // добавить count облаков в случайные места со случайной текстурой
+    void SetHorizontalRange(glm::vec2 range);
+    void SetVerticalRange(glm::vec2 range);
+    void SetMaxSpeed(float speed);
+    void SetMaxSize(float size);
+    void SetColor(glm::vec4 color);
 
 private:
     std::vector<QSharedPointer<Cloud>> _clouds; // облака
     std::vector<GLuint> _textures; // текстуры облаокв
     glm::vec2 _range; // область существования облаков
+    glm::vec2 _vertRange;
+    glm::vec4 _color;
+    float _maxSpeed;
+    float _maxSize;
 };
 
 

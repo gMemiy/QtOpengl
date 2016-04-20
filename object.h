@@ -11,25 +11,25 @@ class Object // объект, имеющий своё положение и ск
 public:
 
     Object();
-    Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color, glm::vec3 gravity);
+    Object(glm::vec2 pos, glm::vec2 vel, glm::vec4 color, glm::vec2 gravity);
     virtual ~Object();
 
     virtual void Draw();
     virtual void Update(float dt);
 
-    void SetPos(glm::vec3 pos);    
-    void SetVelocity(glm::vec3 vel);
+    void SetPos(glm::vec2 pos);
+    void SetVelocity(glm::vec2 vel);
     void SetColor(glm::vec4 color);
-    void SetGravity(glm::vec3 gravity);
+    void SetGravity(glm::vec2 gravity);
 
-    glm::vec3 GetPos();
+    glm::vec2 GetPos();
     glm::vec4 GetColor();
 
 protected:
 
-    glm::vec3 _pos;
-    glm::vec3 _vel;
-    glm::vec3 _gravity;
+    glm::vec2 _pos;
+    glm::vec2 _vel;
+    glm::vec2 _gravity;
     glm::vec4 _color;
 };
 

@@ -4,7 +4,7 @@
 #include "particlesystem.h"
 
 
-struct Bullet // структура для настройки эффектов ракет
+struct BulletType // структура для настройки эффектов ракет
 {
     float bulletCount = 1;
     float speed = 1;
@@ -27,14 +27,18 @@ public:
     int ParticleCount(); // количество частиц
     void AddBullet(glm::vec2 pos, int level, float lifeTime, glm::vec2 vel, glm::vec4 color, float childLifeTime, float childSpeed, float size, int count); // добавить ракету
     void AddBoom(glm::vec2 pos, float lifeTime, glm::vec4 color, float childLifeTime, float size, float speed, int count); // добавить волну
-    void AddBulletByType(glm::vec2 pos, int level, glm::vec4 color, QSharedPointer<Bullet> bType, float scale); // добваить ракету по настройке из Bullet
-    void InitBullets(); // дефолтные ракеты
+    void AddBulletByType(glm::vec2 pos, int level, glm::vec4 color, QSharedPointer<BulletType> bType, float scale); // добваить ракету по настройке из BulletType
+    void AddBulletType(QSharedPointer<BulletType> type);
+    void AddColor(glm::vec4 color);
+    void SetFirst(BulletType first);
 
 private:
 
-    std::vector<glm::vec4> _colors;
+    BulletType _first;
+
+    std::vector<glm::vec4> _colors; // цвета
     std::vector< QSharedPointer <ParticleSystem> > _bullets; // ракеты
-    std::vector<QSharedPointer <Bullet>> _bulletTypes; // настроенные типы ракет
+    std::vector<QSharedPointer <BulletType>> _bulletTypes; // настроенные типы ракет
 };
 
 #endif // FIREWORK_H

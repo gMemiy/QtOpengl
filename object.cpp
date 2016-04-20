@@ -9,7 +9,7 @@ Object::Object():
 
 }
 
-Object::Object(glm::vec3 pos, glm::vec3 vel, glm::vec4 color, glm::vec3 gravity):
+Object::Object(glm::vec2 pos, glm::vec2 vel, glm::vec4 color, glm::vec2 gravity):
     _pos(pos)
   , _vel(vel)
   , _color(color)
@@ -23,12 +23,12 @@ Object::~Object()
 
 }
 
-void Object::SetPos(glm::vec3 pos)
+void Object::SetPos(glm::vec2 pos)
 {
     _pos = pos;
 }
 
-void Object::SetVelocity(glm::vec3 vel)
+void Object::SetVelocity(glm::vec2 vel)
 {
     _vel = vel;
 }
@@ -39,7 +39,7 @@ void Object::Update(float dt)
     _vel += _gravity * dt;
 }
 
-void Object::SetGravity(glm::vec3 gravity)
+void Object::SetGravity(glm::vec2 gravity)
 {
     _gravity = gravity;
 }
@@ -54,7 +54,7 @@ void Object::Draw()
 
 }
 
-glm::vec3 Object::GetPos()
+glm::vec2 Object::GetPos()
 {
     return _pos;
 }

@@ -50,6 +50,7 @@ private:
     void DrawBackGround(GLuint texture); // рисует прямоугольник на весь экран, с заданной текстурой
     float GetDt();
     void UpdateStatistic(float dt);
+    void InitFireWork();
 };
 
 #endif // SCENE_H
