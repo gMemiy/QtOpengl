@@ -29,7 +29,6 @@ void ParticleSystem::SetCount(int count)
 {
     _count = count;
     SetChildLifeTime(_childLifeTime); // вычисляем время между появлениями 2х частиц
-
 }
 
 void ParticleSystem::UpdateChild(float dt)
