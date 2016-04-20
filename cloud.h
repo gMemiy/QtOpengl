@@ -8,7 +8,7 @@ class Cloud : public Object // объект, знающий о своём раз
 public:
 
     Cloud();
-    Cloud(glm::vec3 pos, glm::vec3 vel);
+    Cloud(glm::vec2 pos, glm::vec2 vel);
     virtual ~Cloud();
 
     virtual void Update(float dt);

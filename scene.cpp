@@ -1,5 +1,4 @@
 #include "scene.h"
-//#include "glext.h"
 
 
 
@@ -150,11 +149,11 @@ void Scene::mousePressEvent(QMouseEvent* pe) // нажатие клавиши м
     _fw.Push(ScreenToWorld(pe->pos()), 1);
 }
 
-glm::vec3 Scene::ScreenToWorld(QPoint p)
+glm::vec2 Scene::ScreenToWorld(QPoint p)
 {
     float x = (float)p.x() / (float)width() * (float)(abs(_hor.x) + abs(_hor.y)) - (float)abs(_hor.x);
     float y = ((float)height() - (float)p.y()) / (float)height() * (float)(abs(_vert.x) + abs(_vert.y)) - (float)abs(_vert.x);
-    return glm::vec3( x, y, 0.f);
+    return glm::vec2( x, y);
 }
 
 void Scene::DrawBackGround(GLuint texture)
@@ -168,13 +167,13 @@ void Scene::DrawBackGround(GLuint texture)
     glColor3f(1, 1, 1);
     glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0,0);
-        glVertex3fv(&glm::vec3(_hor.x, _vert.x, 0)[0]);
+        glVertex2fv(&glm::vec2(_hor.x, _vert.x)[0]);
         glTexCoord2f(0,1);
-        glVertex3fv(&glm::vec3(_hor.x, _vert.y, 0)[0]);
+        glVertex2fv(&glm::vec2(_hor.x, _vert.y)[0]);
         glTexCoord2f(1,0);
-        glVertex3fv(&glm::vec3(_hor.y, _vert.x, 0)[0]);
+        glVertex2fv(&glm::vec2(_hor.y, _vert.x)[0]);
         glTexCoord2f(1,1);
-        glVertex3fv(&glm::vec3(_hor.y, _vert.y, 0)[0]);
+        glVertex2fv(&glm::vec2(_hor.y, _vert.y)[0]);
     glEnd();
 }
 

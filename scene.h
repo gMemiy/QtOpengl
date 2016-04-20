@@ -45,7 +45,7 @@ private:
 
     CloudManager _cloud; // менеджер облаков
 
-    glm::vec3 ScreenToWorld(QPoint p); // перевод оконнх координат в координаты сцены
+    glm::vec2 ScreenToWorld(QPoint p); // перевод оконнх координат в координаты сцены
     GLuint InitTexture(QString path); // загрузка текстуры из файла
     void DrawBackGround(GLuint texture); // рисует прямоугольник на весь экран, с заданной текстурой
     float GetDt();

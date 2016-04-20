@@ -11,7 +11,7 @@ Particle::Particle() : Object()
 
 }
 
-Particle::Particle(glm::vec3 pos , float lifeTime, float size, float maxSpeed) :
+Particle::Particle(glm::vec2 pos , float lifeTime, float size, float maxSpeed) :
     Object()
   ,  _size(size)
   ,  _lifeTime(lifeTime)
@@ -36,13 +36,13 @@ void Particle::Draw()
     float size = _size / 2;
     glBegin(GL_TRIANGLE_STRIP);
         glTexCoord2f(0,0);
-        glVertex3fv(&glm::vec3(_pos.x - size, _pos.y - size, _pos.z)[0]);
+        glVertex2fv(&glm::vec2(_pos.x - size, _pos.y - size)[0]);
         glTexCoord2f(0,1);
-        glVertex3fv(&glm::vec3(_pos.x - size, _pos.y + size, _pos.z)[0]);
+        glVertex2fv(&glm::vec2(_pos.x - size, _pos.y + size)[0]);
         glTexCoord2f(1,0);
-        glVertex3fv(&glm::vec3(_pos.x + size, _pos.y - size, _pos.z)[0]);
+        glVertex2fv(&glm::vec2(_pos.x + size, _pos.y - size)[0]);
         glTexCoord2f(1,1);
-        glVertex3fv(&glm::vec3(_pos.x + size, _pos.y + size, _pos.z)[0]);
+        glVertex2fv(&glm::vec2(_pos.x + size, _pos.y + size)[0]);
     glEnd();
 }
 
@@ -79,8 +79,10 @@ void Particle::SetMaxSpeed(float maxSpeed) // частица буедт имет
 {
     float speed = (float)((float)(rand() % 10) * maxSpeed - 5.f * maxSpeed) / (10.f );
 
-    _vel = glm::vec3(speed, 0, 0);
-    _vel = glm::rotateZ(_vel, (float)(rand() % 360) / 180.f * 3.14f);
+    ;
+    glm::vec3 vec = glm::rotateZ(glm::vec3(speed, 0, 0), (float)(rand() % 360) / 180.f * 3.14f);
+    _vel.x = vec.x;
+    _vel.y = vec.y;
 
 }
 

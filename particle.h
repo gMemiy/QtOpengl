@@ -7,7 +7,7 @@ class Particle : public Object // тот же объект, только с ра
 {
 public:
     Particle();
-    Particle(glm::vec3 pos, float lifeTime, float size, float speedMax);
+    Particle(glm::vec2 pos, float lifeTime, float size, float speedMax);
     virtual ~Particle();
 
     virtual void Draw();

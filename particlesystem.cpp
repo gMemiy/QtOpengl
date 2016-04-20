@@ -29,26 +29,22 @@ void ParticleSystem::SetCount(int count)
 {
     _count = count;
     SetChildLifeTime(_childLifeTime); // вычисляем время между появлениями 2х частиц
+
 }
 
 void ParticleSystem::UpdateChild(float dt)
 {
-    std::vector<int> dead;
-    int i = 0;
-    for ( std::vector< QSharedPointer<Particle> >::iterator p = _particles.begin(); p != _particles.end(); ++p, ++i)
+    for ( std::vector< QSharedPointer<Particle> >::iterator p = _particles.begin(); p != _particles.end();)
     {
         (*p)->Update(dt);
         if (!(*p)->IsAlive())
         {
-            dead.push_back(i); // запоминаем мёртвые частицы
+            p = _particles.erase(p);
         }
-    }
-
-    while (!dead.empty()) // убиваем мёртвые частицы
-    {
-        int index = dead.back();
-        dead.pop_back();
-        _particles.erase(_particles.begin() + index);
+        else
+        {
+            ++p;
+        }
     }
 }
 
@@ -122,7 +118,6 @@ bool ParticleSystem::IsEnd()
     return !(_lifeTimer >= 0);
 }
 
-
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -142,7 +137,7 @@ void Boom::AddAllParticles()
 
         glm::vec3 speed(_speed, 0, 0);
         speed = glm::rotateZ(speed, angle);
-        p->SetVelocity(speed);
+        p->SetVelocity(glm::vec2(speed.x, speed.y));
         angle += grad;
 
         _particles.push_back(p);
